@@ -1,27 +1,29 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from openai import OpenAI
+# main.py
+from flask import Flask, request, jsonify
+import openai
+import os
 
-app = FastAPI()
-client = OpenAI()
+app = Flask(__name__)
 
-class UserRequest(BaseModel):
-    message: str
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-@app.post("/recommend")
-async def recommend_facility(user_request: UserRequest):
+@app.route("/recommend", methods=["POST"])
+def recommend_facility():
+    data = request.get_json()
+    message = data.get("message", "")
+
+    if not message:
+        return jsonify({"error": "No message provided"}), 400
+
     try:
-        completion = client.chat.completions.create(
-            model="ft:gpt-4o-mini-2024-07-18:personal::ANHKfbn9",
-            messages=[
-                {"role": "user", "content": user_request.message}
-            ]
+        completion = openai.ChatCompletion.create(
+            model="ft:gpt-4o-mini-2024-07-18:personal::ANI7DT95",
+            messages=[{"role": "user", "content": message}]
         )
-        response_message = completion.choices[0].message.content
-        return {"response": response_message}
+        response_message = completion.choices[0].message["content"]
+        return jsonify({"response": response_message})
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        return jsonify({"error": str(e)}), 500
 
-# Vercel requires this callable
-def handler(event, context):
-    return app(event, context)
+if __name__ == "__main__":
+    app.run(debug=True)
