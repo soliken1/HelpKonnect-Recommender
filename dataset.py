@@ -6,11 +6,16 @@ from collections import defaultdict
 datapath = "data/dataset_finetune.jsonl"
 
 with open(datapath, 'r', encoding='utf-8') as f:
-    dataset = [json.loads(line) for line in f]
+    dataset = []
+    for line in f:
+        line = line.strip()
+        if line:
+            dataset.append(json.loads(line))
+
 
 print("Num examples: ", len(dataset))
 print("First Example: ")
-for message in dataset[0]["messages"]:
+for message in dataset[10]["messages"]:
     print(message)
 
 # Format error checks
@@ -54,8 +59,6 @@ else:
 
 encoding = tiktoken.get_encoding("cl100k_base")
 
-# not exact!
-# simplified from https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
 def num_tokens_from_messages(messages, tokens_per_message=3, tokens_per_name=1):
     num_tokens = 0
     for message in messages:
@@ -81,7 +84,6 @@ def print_distribution(values, name):
     print(f"p5 / p95: {np.quantile(values, 0.1)}, {np.quantile(values, 0.9)}")
 
 
-# Warnings and tokens counts
 n_missing_system = 0
 n_missing_user = 0
 n_messages = []
@@ -106,7 +108,6 @@ print_distribution(assistant_message_lens, "num_assistant_tokens_per_example")
 n_too_long = sum(l > 16385 for l in convo_lens)
 print(f"\n{n_too_long} examples may be over the 16,385 token limit, they will be truncated during fine-tuning")
 
-# Pricing and default n_epochs estimate
 MAX_TOKENS_PER_EXAMPLE = 16385
 
 TARGET_EPOCHS = 3
