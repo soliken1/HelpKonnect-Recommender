@@ -17,7 +17,7 @@ def recommend_facility():
 
     try:
         completion = openai.ChatCompletion.create(
-            model="ft:gpt-4o-mini-2024-07-18:personal::ANI7DT95",
+            model="ft:gpt-4o-mini-2024-07-18:personal::ANJY20nd",
             messages=[{"role": "user", "content": message}]
         )
         response_message = completion.choices[0].message["content"]
