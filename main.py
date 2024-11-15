@@ -18,6 +18,10 @@ facilities = [
     {"id": "RBE Psychological Services", "description": "RBEPS offers holistic services to individuals, couples, and families to overcome mental health issues.", "embedding": get_embedding("RBEPS offers holistic services to individuals, couples, and families to overcome mental health issues.")}
 ]
 
+def is_recommendation_request(message):
+    keywords = ["recommend", "suggest", "facility", "help", "support"]
+    return any(keyword in message.lower() for keyword in keywords)
+
 @app.route("/recommend", methods=["POST"])
 def recommend_with_interaction():
     data = request.get_json()
@@ -35,16 +39,19 @@ def recommend_with_interaction():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-    query_embedding = get_embedding(message)
+    if is_recommendation_request(message):
+        query_embedding = get_embedding(message)
 
-    similarities = [
-        (facility, np.dot(query_embedding, facility["embedding"].flatten()))
-        for facility in facilities
-    ]
+        similarities = [
+            (facility, np.dot(query_embedding, facility["embedding"].flatten()))
+            for facility in facilities
+        ]
 
-    best_match = max(similarities, key=lambda x: x[1])[0]
+        best_match = max(similarities, key=lambda x: x[1])[0]
 
-    response_message = f"{user_response}\n\nRecommended Facility: {best_match['id']}\nDescription: {best_match['description']}"
+        response_message = f"{user_response}\n\nRecommended Facility: {best_match['id']}\nDescription: {best_match['description']}"
+    else:
+        response_message = user_response
 
     return jsonify({"response": response_message})
 
