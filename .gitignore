@@ -1,1 +1,4 @@
 .venv
+        __pycache__/
+.idea/HelpKonnect Finetuning.iml
+.idea/misc.xml
