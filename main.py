@@ -3,6 +3,11 @@ from flask_cors import CORS
 import openai
 import os
 import numpy as np
+import requests
+
+url = "https://helpkonnect.vercel.app/api/fetchFacilities"
+response = requests.get(url)
+data = response.json()
 
 app = Flask(__name__)
 CORS(app)
@@ -13,9 +18,14 @@ def get_embedding(text):
     response = openai.Embedding.create(model="text-embedding-ada-002", input=text)
     return np.array(response['data'][0]['embedding'])
 
+# Fetching facilities data and formatting it to match the required structure
 facilities = [
-    {"id": "Kalinaw MindCenter", "description": "A Mental Health Clinic in Cebu that provides Psychiatric Consultations, Psychotherapy & Counselling.", "embedding": get_embedding("A Mental Health Clinic in Cebu that provides Psychiatric Consultations, Psychotherapy & Counselling.")},
-    {"id": "RBE Psychological Services", "description": "RBEPS offers holistic services to individuals, couples, and families to overcome mental health issues.", "embedding": get_embedding("RBEPS offers holistic services to individuals, couples, and families to overcome mental health issues.")}
+    {
+        "id": facility["facilityName"],
+        "description": facility["facilityDescription"],
+        "embedding": get_embedding(facility["facilityDescription"])
+    }
+    for facility in data['fetchFacility']
 ]
 
 def is_recommendation_request(message):
