@@ -6,6 +6,7 @@ import numpy as np
 import requests
 
 url = "https://helpkonnect.vercel.app/api/fetchFacilities"
+user_preference = ""
 response = requests.get(url)
 data = response.json()
 
@@ -14,9 +15,11 @@ CORS(app)
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
 def get_embedding(text):
     response = openai.Embedding.create(model="text-embedding-ada-002", input=text)
     return np.array(response['data'][0]['embedding'])
+
 
 # Fetching facilities data and formatting it to match the required structure
 facilities = [
@@ -29,13 +32,21 @@ facilities = [
     for facility in data['fetchFacility']
 ]
 
+
 def is_recommendation_request(message):
     keywords = ["recommend", "suggest", "facility", "help", "support"]
     return any(keyword in message.lower() for keyword in keywords)
 
+
+@app.route("/preference", methods=["POST"])
+def analyze_user_preference():
+    return jsonify({"response": "in progress"})
+
+
 @app.route("/recommend", methods=["POST"])
 def recommend_with_interaction():
     data = request.get_json()
+    user_id = data.get("userId", "")
     message = data.get("message", "")
 
     if not message:
@@ -65,6 +76,7 @@ def recommend_with_interaction():
         response_message = user_response
 
     return jsonify({"response": response_message})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
