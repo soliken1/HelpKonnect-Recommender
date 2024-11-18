@@ -23,7 +23,8 @@ facilities = [
     {
         "id": facility["facilityName"],
         "description": facility["facilityDescription"],
-        "embedding": get_embedding(facility["facilityDescription"])
+        "expertise": facility["facilityExpertise"],
+        "embedding": get_embedding(facility["facilityDescription"] + " " + facility["facilityExpertise"])
     }
     for facility in data['fetchFacility']
 ]
@@ -59,7 +60,7 @@ def recommend_with_interaction():
 
         best_match = max(similarities, key=lambda x: x[1])[0]
 
-        response_message = f"{user_response}\n\nRecommended Facility: {best_match['id']}\nDescription: {best_match['description']}"
+        response_message = f"{user_response}\n\nRecommended Facility: {best_match['id']}\nDescription: {best_match['description']}\nExpertise: {best_match['expertise']}"
     else:
         response_message = user_response
 
