@@ -68,13 +68,7 @@ def analyze_user_preference():
             analysis_response = openai.ChatCompletion.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": "You are a system designed to summarize user preferences from a "
-                                                  "series of questions and answers. Your goal is to generate a "
-                                                  "concise, descriptive summary of preferences based on the input "
-                                                  "provided. The summary should be clear, use natural language, "
-                                                  "and cover all key aspects of the user's preferences. Avoid listing "
-                                                  "or numbering; instead, focus on creating a cohesive sentence. Here "
-                                                  "is the user's input:"},
+                    {"role": "system", "content": "You are a system designed to summarize user preferences from a series of questions and answers. Your goal is to generate a concise, descriptive summary of preferences based on the input provided. The summary should be clear, use natural language and short as possible, and cover all key aspects of the user's preferences. Avoid listing or numbering; instead, focus on creating a cohesive sentence. Here is the user's input:"},
                     {"role": "user", "content": formatted_answers}
                 ]
             )
