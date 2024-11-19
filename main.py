@@ -79,7 +79,7 @@ def analyze_user_preference():
         # Step 3: Update User Preference
         update_response = requests.post(analyze_answer_url, json={
             "userId": user_id,
-            "userPreference": analyzed_preference
+            "userPref": analyzed_preference
         })
         update_response.raise_for_status()
 
