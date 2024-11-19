@@ -52,7 +52,7 @@ def analyze_user_preference():
         # Step 1: Fetch User Answers
         answers_response = requests.post(user_answers_url, json={"userId": user_id})
         answers_response.raise_for_status()
-        user_answers = answers_response.json().get("answers", [])
+        user_answers = answers_response.json().get("userAnswers", [])
 
         if not user_answers:
             return jsonify({"error": "No answers found for the user"}), 404
