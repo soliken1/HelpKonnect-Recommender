@@ -68,7 +68,7 @@ def analyze_user_preference():
             analysis_response = openai.ChatCompletion.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": "You are an assistant summarizing user preferences from Q&A responses."},
+                    {"role": "system", "content": "You are an assistant summarizing user preferences from Q&A responses. Each QnA results should be 3 words max."},
                     {"role": "user", "content": formatted_answers}
                 ]
             )
