@@ -29,7 +29,7 @@ facilities = [
         "id": facility["facilityName"],
         "description": facility["facilityDescription"],
         "expertise": facility["facilityExpertise"],
-        "embedding": get_embedding(facility["facilityDescription"] + " " + facility["facilityExpertise"])
+        "embedding": get_embedding(facility["facilityExpertise"])
     }
     for facility in data['fetchFacility']
 ]
@@ -68,7 +68,13 @@ def analyze_user_preference():
             analysis_response = openai.ChatCompletion.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": "You are a system designed to summarize user preferences from a series of questions and answers. Your goal is to generate a concise, descriptive summary of preferences based on the input provided. The summary should be clear, use natural language and short as possible, and cover all key aspects of the user's preferences. Avoid listing or numbering; instead, focus on creating a cohesive sentence. Here is the user's input:"},
+                    {"role": "system", "content": "You are a system designed to analyze user preferences from a "
+                                                  "series of questions and answers. Your goal is to generate a "
+                                                  "concise list of tags summarizing the user's preferences. Each tag "
+                                                  "should be a maximum of three words and should end with a comma. "
+                                                  "Avoid using complete sentences or numbered lists. Focus on key "
+                                                  "aspects of the preferences, capturing the user's input succinctly. "
+                                                  "Here is the user's input:"},
                     {"role": "user", "content": formatted_answers}
                 ]
             )
@@ -88,6 +94,7 @@ def analyze_user_preference():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 @app.route("/recommend", methods=["POST"])
 def recommend_with_interaction():
@@ -141,6 +148,7 @@ def recommend_with_interaction():
         response_message = user_response
 
     return jsonify({"response": response_message})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
