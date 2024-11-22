@@ -29,7 +29,9 @@ facilities = [
         "id": facility["facilityName"],
         "description": facility["facilityDescription"],
         "expertise": facility["facilityExpertise"],
-        "embedding": get_embedding(facility["facilityExpertise"])
+        "description_tag": facility["descriptionTag"],
+        "expertise_tag": facility["expertiseTag"],
+        "embedding": get_embedding(facility["descriptionTag"] + " " + facility["expertiseTag"])
     }
     for facility in data['fetchFacility']
 ]
