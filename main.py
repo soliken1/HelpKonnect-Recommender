@@ -41,7 +41,10 @@ def is_recommendation_request(message):
     keywords = ["recommend", "suggest", "facility", "help", "support"]
     return any(keyword in message.lower() for keyword in keywords)
 
-
+@app.route("/tagging", methods=["POST"])
+def convert_to_tags():
+    data = request.get_json()
+    facility_id = data.get("userId", "")
 @app.route("/preference", methods=["POST"])
 def analyze_user_preference():
     data = request.get_json()
