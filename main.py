@@ -66,7 +66,7 @@ def analyze_user_preference():
         # Step 2: Analyze Answers using OpenAI
         try:
             analysis_response = openai.ChatCompletion.create(
-                model="gpt-4o-mini",
+                model="ft:gpt-4o-mini-2024-07-18:personal::ANJY20nd",
                 messages=[
                     {"role": "system", "content": "You are a system designed to analyze user preferences from a "
                                                   "series of questions and answers. Your goal is to generate a "
