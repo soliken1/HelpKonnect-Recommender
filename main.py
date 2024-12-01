@@ -38,7 +38,7 @@ facilities = [
 
 
 def is_recommendation_request(message):
-    keywords = ["recommend", "suggest", "facility", "help", "support"]
+    keywords = ["recommend", "suggest"]
     return any(keyword in message.lower() for keyword in keywords)
 
 # @app.route("/tagging", methods=["POST"])
