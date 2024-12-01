@@ -41,10 +41,30 @@ def is_recommendation_request(message):
     keywords = ["recommend", "suggest", "facility", "help", "support"]
     return any(keyword in message.lower() for keyword in keywords)
 
-@app.route("/tagging", methods=["POST"])
-def convert_to_tags():
-    data = request.get_json()
-    facility_id = data.get("userId", "")
+# @app.route("/tagging", methods=["POST"])
+# def convert_to_tags():
+#     data = request.get_json()
+#     facility_id = data.get("userId", "")
+#     facility_desc = data.get("facilityDescription", "")
+#     facility_exp = data.get("facilityExpertise", "")
+#
+#     try:
+#         analysis_response = openai.ChatCompletion.create(
+#             model="ft:gpt-4o-mini-2024-07-18:personal::AWF8W5og",
+#             messages=[
+#                 {"role": "system", "content": "You are a system designed to analyze user preferences from a "
+#                                               "series of questions and answers. Your goal is to generate a "
+#                                               "concise list of tags summarizing the facilities' expertise. Each tag should be a maximum of three words and should end with a comma. "
+#                                               "Avoid using complete sentences or numbered lists. Focus on key "
+#                                               "aspects of the preferences, capturing the user's input succinctly. "
+#                                               "Here is the user's input:"},
+#                 {"role": "user", "content": formatted_answers}
+#             ]
+#         )
+#         analyzed_preference = analysis_response.choices[0].message["content"].strip()
+#     except Exception as e:
+#         return jsonify({"error": f"OpenAI analysis failed: {str(e)}"}), 500
+
 @app.route("/preference", methods=["POST"])
 def analyze_user_preference():
     data = request.get_json()
@@ -71,7 +91,7 @@ def analyze_user_preference():
         # Step 2: Analyze Answers using OpenAI
         try:
             analysis_response = openai.ChatCompletion.create(
-                model="ft:gpt-4o-mini-2024-07-18:personal::ANJY20nd",
+                model="ft:gpt-4o-mini-2024-07-18:personal::AWF8W5og",
                 messages=[
                     {"role": "system", "content": "You are a system designed to analyze user preferences from a "
                                                   "series of questions and answers. Your goal is to generate a "
@@ -126,7 +146,7 @@ def recommend_with_interaction():
         query_embedding = get_embedding(combined_query)
 
         completion = openai.ChatCompletion.create(
-            model="ft:gpt-4o-mini-2024-07-18:personal::ANJY20nd",
+            model="ft:gpt-4o-mini-2024-07-18:personal::AWF8W5og",
             messages=[{"role": "user", "content": message}]
         )
         user_response = completion.choices[0].message["content"]
