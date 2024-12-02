@@ -50,7 +50,7 @@ def is_recommendation_request(message):
 #
 #     try:
 #         analysis_response = openai.ChatCompletion.create(
-#             model="ft:gpt-4o-mini-2024-07-18:personal::AWF8W5og",
+#             model="ft:gpt-4o-mini-2024-07-18:personal::AZsFJKI8",
 #             messages=[
 #                 {"role": "system", "content": "You are a system designed to analyze user preferences from a "
 #                                               "series of questions and answers. Your goal is to generate a "
@@ -91,7 +91,7 @@ def analyze_user_preference():
         # Step 2: Analyze Answers using OpenAI
         try:
             analysis_response = openai.ChatCompletion.create(
-                model="ft:gpt-4o-mini-2024-07-18:personal::AWF8W5og",
+                model="ft:gpt-4o-mini-2024-07-18:personal::AZsFJKI8",
                 messages=[
                     {"role": "system", "content": "You are a system designed to analyze user preferences from a "
                                                   "series of questions and answers. Your goal is to generate a "
@@ -146,7 +146,7 @@ def recommend_with_interaction():
         query_embedding = get_embedding(combined_query)
 
         completion = openai.ChatCompletion.create(
-            model="ft:gpt-4o-mini-2024-07-18:personal::AWF8W5og",
+            model="ft:gpt-4o-mini-2024-07-18:personal::AZsFJKI8",
             messages=[{"role": "user", "content": message}]
         )
         user_response = completion.choices[0].message["content"]
