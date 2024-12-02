@@ -153,6 +153,8 @@ def recommend_with_interaction():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+    user_response = user_response.replace("ChatGPT", "Help-Pal")
+
     if is_recommendation_request(message):
         # Compute similarities
         similarities = [
@@ -172,8 +174,9 @@ def recommend_with_interaction():
     else:
         response_message = user_response
 
-    return jsonify({"response": response_message})
+    response_message = response_message.replace("ChatGPT", "Help-Pal")
 
+    return jsonify({"response": response_message})
 
 if __name__ == "__main__":
     app.run(debug=True)
